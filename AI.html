@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blackjack Game</title>
+    <link rel="stylesheet" href="Style/Style.css">
+    <style>
+        body {
+            background-color: #2b2b2b; /* Dark background */
+            color: #f5f5f5; /* Light text */
+            font-family: 'Courier New', Courier, monospace; /* Casino-style font */
+            text-align: center;
+        }
+
+        .black-bar {
+            background-color: #000000; /* Black header bar */
+            padding: 10px;
+        }
+
+        .header-links a {
+            color: #ffcc00; /* Gold links */
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        .header-links a:hover {
+            color: #ffffff; /* White on hover */
+        }
+
+        h1 {
+            color: #006400; /* Dark green for the title */
+            text-shadow: 2px 2px #000000; /* Shadow for depth */
+        }
+
+        h2 {
+            color: #ffcc00; /* Gold for subheadings */
+            text-shadow: 1px 1px #000000;
+        }
+
+        #generate-btn, #generate-extra-btn, #generate-btn-2, #generate-extra-btn-2 {
+            background-color: #006400; /* Dark green buttons */
+            color: #ffffff; /* White text */
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px #000000;
+        }
+
+        #generate-btn:hover, #generate-extra-btn:hover, #generate-btn-2:hover, #generate-extra-btn-2:hover {
+            background-color: #004d00; /* Even darker green on hover */
+        }
+
+        #output-box, #output-box-2 {
+            border: 3px solid #ffcc00; /* Gold border */
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            background-color: #333333; /* Dark gray background */
+            color: #ffffff; /* White text */
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0px 0px 10px #ffcc00; /* Glow effect */
+        }
+
+        #random-number-display, #extra-number-display, #random-number-display-2, #extra-number-display-2 {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="black-bar">
+        <nav class="header-links">
+            <a href="Scratch.html">Scratch Page</a>
+            <a href="Pages/Resume.html">Resume</a>
+        </nav>
+        <h1>AI Blackjack Game</h1>
+    </header>
+    <div class="center-content">
+        <h2>Play Some Blackjack (Player 1)</h2>
+        <button id="generate-btn">Deal Me In</button>
+        <button id="generate-extra-btn">Hit Me</button>
+        <div id="output-box">
+            <h3>Your Cards</h3>
+            <p id="random-number-display"></p>
+            <p id="extra-number-display" style="display: none;"></p>
+            <div id="ace-choice" style="display: none; margin-top: 10px;">
+                <p>You got an Ace! Choose its value:</p>
+                <button id="ace-value-1" style="margin-right: 10px;">1</button>
+                <button id="ace-value-11">11</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="center-content">
+        <h2>Play Some Blackjack (Player 2)</h2>
+        <button id="generate-btn-2">Deal Me In</button>
+        <button id="generate-extra-btn-2">Hit Me</button>
+        <div id="output-box-2">
+            <h3>Your Cards</h3>
+            <p id="random-number-display-2"></p>
+            <p id="extra-number-display-2" style="display: none;"></p>
+            <div id="ace-choice-2" style="display: none; margin-top: 10px;">
+                <p>You got an Ace! Choose its value:</p>
+                <button id="ace-value-1-2" style="margin-right: 10px;">1</button>
+                <button id="ace-value-11-2">11</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleAceChoice(aceValue, currentTotal, aceText, otherNumber, otherValue, displayId, aceChoiceId) {
+            const newTotal = currentTotal + aceValue + otherValue;
+            let totalText = ` (Total: ${newTotal})`;
+            if (newTotal > 21) {
+                totalText = ` - Bust! (Total: ${newTotal})`;
+            }
+
+            document.getElementById(displayId).innerHTML = `${aceText} and <span style="color: black;">${otherNumber}</span>${totalText}`;
+            document.getElementById(displayId).dataset.total = newTotal; // Update the total in a data attribute
+            document.getElementById(aceChoiceId).style.display = 'none'; // Hide Ace choice buttons
+        }
+
+        function setupGenerator(generateBtnId, extraBtnId, displayId, aceChoiceId, aceValue1Id, aceValue11Id) {
+            document.getElementById(generateBtnId).addEventListener('click', function () {
+                const options = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'A', 'K', 'J', 'Q'];
+                const valueMap = { 'A': 1, 'K': 10, 'J': 10, 'Q': 10 }; // Map for special values
+                const randomNumber1 = options[Math.floor(Math.random() * options.length)];
+                const randomNumber2 = options[Math.floor(Math.random() * options.length)];
+                const currentTotal = 0;
+
+                if (randomNumber1 === 'A') {
+                    const otherValue = typeof randomNumber2 === 'number' ? randomNumber2 : valueMap[randomNumber2];
+                    document.getElementById(displayId).innerHTML = `<span style="color: darkred;">A</span> and <span style="color: black;">${randomNumber2}</span>`;
+                    document.getElementById(aceChoiceId).style.display = 'block'; // Show Ace choice buttons
+                    document.getElementById(aceValue1Id).onclick = () => handleAceChoice(1, currentTotal, `<span style="color: darkred;">A</span>`, randomNumber2, otherValue, displayId, aceChoiceId);
+                    document.getElementById(aceValue11Id).onclick = () => handleAceChoice(11, currentTotal, `<span style="color: darkred;">A</span>`, randomNumber2, otherValue, displayId, aceChoiceId);
+                } else {
+                    const value1 = typeof randomNumber1 === 'number' ? randomNumber1 : valueMap[randomNumber1];
+                    const value2 = typeof randomNumber2 === 'number' ? randomNumber2 : valueMap[randomNumber2];
+                    const total = value1 + value2;
+
+                    let displayText = `<span style="color: darkred;">${randomNumber1}</span> and <span style="color: black;">${randomNumber2}</span>`;
+                    if (total > 21) {
+                        displayText += ` - Bust! (Total: ${total})`;
+                    } else {
+                        displayText += ` (Total: ${total})`;
+                    }
+
+                    document.getElementById(displayId).innerHTML = displayText;
+                    document.getElementById(displayId).dataset.total = total; // Store the total in a data attribute
+                    document.getElementById(aceChoiceId).style.display = 'none'; // Hide Ace choice buttons
+                }
+            });
+
+            document.getElementById(extraBtnId).addEventListener('click', function () {
+                const options = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'A', 'K', 'J', 'Q'];
+                const valueMap = { 'A': 1, 'K': 10, 'J': 10, 'Q': 10 }; // Map for special values
+                const extraNumber = options[Math.floor(Math.random() * options.length)];
+                const currentTotal = parseInt(document.getElementById(displayId).dataset.total || 0);
+
+                if (extraNumber === 'A') {
+                    document.getElementById(displayId).innerHTML += `, <span style="color: darkred;">A</span>`;
+                    document.getElementById(aceChoiceId).style.display = 'block'; // Show Ace choice buttons
+                    document.getElementById(aceValue1Id).onclick = () => handleAceChoice(1, currentTotal, `<span style="color: darkred;">A</span>`, '', 0, displayId, aceChoiceId);
+                    document.getElementById(aceValue11Id).onclick = () => handleAceChoice(11, currentTotal, `<span style="color: darkred;">A</span>`, '', 0, displayId, aceChoiceId);
+                } else {
+                    const extraValue = typeof extraNumber === 'number' ? extraNumber : valueMap[extraNumber];
+                    const newTotal = currentTotal + extraValue;
+
+                    let extraText = `<span style="color: darkred;">${extraNumber}</span>`;
+                    let totalText = ` (Total: ${newTotal})`;
+                    if (newTotal > 21) {
+                        totalText = ` - Bust! (Total: ${newTotal})`;
+                    }
+
+                    document.getElementById(displayId).innerHTML += `, ${extraText}`;
+                    document.getElementById(displayId).innerHTML = document.getElementById(displayId).innerHTML.replace(/\(Total:.*?\)/, totalText);
+                    document.getElementById(displayId).dataset.total = newTotal; // Update the total in a data attribute
+                }
+            });
+        }
+
+        // Setup both generators
+        setupGenerator('generate-btn', 'generate-extra-btn', 'random-number-display', 'ace-choice', 'ace-value-1', 'ace-value-11');
+        setupGenerator('generate-btn-2', 'generate-extra-btn-2', 'random-number-display-2', 'ace-choice-2', 'ace-value-1-2', 'ace-value-11-2');
+    </script>
+</body>
+</html>

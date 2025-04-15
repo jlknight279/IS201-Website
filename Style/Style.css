@@ -1,0 +1,84 @@
+/* General body styling */
+body {
+    background-color: rgb(203, 245, 243);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333; /* Dark grey for text */
+}
+
+
+
+
+.black-bar {
+    background-color: #1c1c1c; /* Black background */
+    color: rgb(203, 245, 243);
+    padding: 1px;
+    text-align: center;
+}
+
+.header-links {
+    float: left;
+    margin-left: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.header-links a {
+    color: #f2f2f2; /* Light grey color */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-links a:hover {
+    background-color: #00bcd4; /* Light blue background */
+    color: #000; /* Black text on hover */
+}
+
+footer {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer .back-to-top {
+    color: #00bcd4; /* Light blue color */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer .back-to-top:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+    margin-bottom: 50px; /* Space for footer */
+}
+
+.tableauPlaceholder {
+    width: 100%;
+    max-width: 1100px; /* Optional: Limit maximum width */
+    margin: 0 auto;
+}
+
+.tableauViz {
+    width: 100%;
+    height: auto;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
